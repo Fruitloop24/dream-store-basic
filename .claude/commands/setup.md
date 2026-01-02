@@ -1,59 +1,120 @@
-# Store Template Setup
+# Store Setup
 
-You are configuring an e-commerce store using the dream-api SDK.
+Configure this store template through a guided conversation.
 
-## Step 1: Gather Information
+## Instructions
 
-Ask the user these questions ONE AT A TIME:
+Ask these questions ONE AT A TIME and wait for each answer before proceeding:
 
-1. **Store Name**: "What's your store name?"
-2. **Tagline**: "What's your store tagline or headline?"
-3. **Description**: "Brief description of what you sell."
-4. **Primary Color**: "What's your primary brand color? (hex like #8b5cf6, or say 'purple', 'blue', etc.)"
-5. **Accent Color**: "What's your secondary/accent color for gradients? (or 'same' to match primary)"
-6. **Publishable Key**: "What's your Dream API publishable key? (starts with pk_test_ or pk_live_)"
+### 1. Store Name
+"What's the name of your store?"
 
-## Step 2: Configure
+### 2. Tagline
+"What's your tagline? (A short phrase that captures what you sell)"
 
-After gathering answers, update these files:
+### 3. Description
+"How would you describe your store in one sentence?"
+
+### 4. Style
+"What style fits your brand?"
+- **Minimal** - Clean, lots of whitespace, understated
+- **Bold** - Strong colors, high contrast, impactful
+- **Warm** - Soft tones, inviting, approachable
+- **Dark** - Dark backgrounds, sleek, modern
+
+### 5. Primary Color
+Based on their style choice, suggest appropriate colors:
+
+**Minimal:** Neutral grays, black/white
+- Primary: `#18181b` (zinc-900), Accent: `#3f3f46` (zinc-700)
+
+**Bold:** Vibrant, saturated colors
+- Primary: `#dc2626` (red-600), Accent: `#ea580c` (orange-600)
+- Primary: `#2563eb` (blue-600), Accent: `#7c3aed` (violet-600)
+
+**Warm:** Earth tones, soft colors
+- Primary: `#a16207` (amber-700), Accent: `#ca8a04` (yellow-600)
+- Primary: `#b45309` (amber-600), Accent: `#d97706` (amber-500)
+
+**Dark:** Subtle highlights on dark base
+- Primary: `#18181b` (zinc-900), Accent: `#52525b` (zinc-600)
+- Primary: `#0f172a` (slate-900), Accent: `#334155` (slate-700)
+
+Ask: "I suggest [color scheme]. Want to use this, or provide your own hex colors?"
+
+### 6. Logo
+"Do you have a logo file to add? (If yes, they should place it in src/assets/)"
+
+If no logo, the store name will be displayed as text.
+
+### 7. Contact Email
+"What email should customers use to contact you?"
+
+---
+
+## After Gathering Info
+
+Update these files:
 
 ### src/App.tsx
-Update the BRANDING object at the top:
+Update the BRANDING object:
 ```typescript
 const BRANDING = {
-  storeName: '[USER_STORE_NAME]',
-  tagline: '[USER_TAGLINE]',
-  description: '[USER_DESCRIPTION]',
-  primaryColor: '[USER_PRIMARY_COLOR]',
-  accentColor: '[USER_ACCENT_COLOR]',
+  storeName: '[their store name]',
+  tagline: '[their tagline]',
+  description: '[their description]',
+  primaryColor: '[chosen primary]',
+  accentColor: '[chosen accent]',
 }
 ```
 
-### .env.local
-Create this file with:
+### src/components/Layout.tsx
+Update the BRANDING object:
+```typescript
+const BRANDING = {
+  storeName: '[their store name]',
+}
 ```
-VITE_DREAM_PUBLISHABLE_KEY=[USER_PK]
+
+If they have a logo, update the header in Layout.tsx:
+```tsx
+<Link to="/" className="flex items-center gap-2">
+  <img src="/assets/logo.png" alt="Logo" className="h-8" />
+  <span className="text-xl font-medium text-zinc-100">{storeName}</span>
+</Link>
 ```
 
-## Color Suggestions
+### src/pages/Contact.tsx
+Update the email address:
+```tsx
+<a href="mailto:[their email]">[their email]</a>
+```
 
-If user says a color name, use these hex values:
-- purple: #8b5cf6, accent: #ec4899
-- blue: #3b82f6, accent: #06b6d4
-- green: #10b981, accent: #22c55e
-- orange: #f97316, accent: #ef4444
-- slate: #475569, accent: #64748b
+### src/pages/About.tsx
+Optionally customize the about content based on their description.
 
-## Step 3: Confirm
+---
 
-After making changes, tell the user:
-1. Run `npm install` if they haven't
-2. Run `npm run dev` to start
-3. Visit http://localhost:5173
+## Final Steps
 
-Ask if they want you to:
-- Add a logo
-- Add localStorage cart persistence
-- Customize card sizes or grid layout
-- Add product categories/filtering
-- Create a custom success page
+After making changes, tell them:
+
+1. "Your store is configured! Here's what I set up:"
+   - Store name: [name]
+   - Style: [style]
+   - Colors: [primary] / [accent]
+
+2. "To run your store locally:"
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+3. "Make sure your .env.local has your publishable key:"
+   ```
+   VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
+   ```
+
+4. "Products are managed in your dream-api dashboard. Any products you create there will appear in your store."
+
+5. "To deploy, run `npm run build` and upload the `dist/` folder to any static host (Cloudflare Pages, Vercel, Netlify)."
