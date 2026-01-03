@@ -14,11 +14,11 @@ export const CONFIG = {
   description: 'Curated items for people who appreciate good things.',
 
   // ============================================
-  // LOGO (optional)
+  // LOGO & HERO IMAGE (optional)
   // ============================================
-  // Place your logo in public/ folder and set the path here
-  // Example: '/logo.png'
-  logo: null as string | null,
+  // Drop images in public/ folder and set paths here
+  logo: null as string | null,        // '/logo.png'
+  heroImage: null as string | null,   // '/hero.jpg' - full-width banner
 
   // ============================================
   // THEME & COLORS
