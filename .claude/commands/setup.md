@@ -63,14 +63,17 @@ From their answer, update `src/config.ts`:
 
 ---
 
-## Step 3: Pick Your Color
+## Step 3: Pick Your Theme & Color
 
-Ask: **"Pick your brand color: zinc (minimal), emerald (fresh), sky (clean), violet (bold), rose (warm), or amber (earthy)?"**
+Ask: **"Light mode or dark mode? And pick your accent color: zinc (minimal), emerald (fresh), sky (clean), violet (bold), rose (warm), or amber (earthy)?"**
 
 Update `src/config.ts`:
 ```typescript
+theme: '[light or dark]',
 accentColor: '[their choice]',
 ```
+
+**Theme switches everything** - backgrounds, text, cards, cart drawer, footer. One line change.
 
 ---
 

@@ -50,11 +50,14 @@ All branding is here:
 - `storeName` - Your store name
 - `tagline` - Short tagline
 - `description` - One sentence about your store
+- `theme` - 'light' or 'dark' (one toggle switches entire store)
 - `accentColor` - zinc, emerald, sky, violet, rose, amber
 - `logo` - Path to logo in public/ folder
 - `footer.tagline` - Footer description
 - `about` - About page content
 - `contact` - Contact email
+
+**Theme system:** Change `theme: 'dark'` to `theme: 'light'` and the entire store switches - backgrounds, text, cards, cart, everything. No other changes needed.
 
 ## What NOT To Modify
 
