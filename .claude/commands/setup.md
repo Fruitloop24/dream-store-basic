@@ -135,9 +135,22 @@ Add/edit products in dashboard → Store updates automatically.
 2. **Add product images** - Upload in dashboard or use URLs
 3. **Deploy** - Run `npm run build` and deploy the `dist/` folder anywhere
 
-**Want to make it installable as a phone app?** Run `/pwa` and I'll add Progressive Web App support.
-
 **Need help?** Check CLAUDE.md for SDK methods and examples."
+
+---
+
+## Make It Installable (PWA)
+
+When they're ready, tell them:
+
+"**Want customers to install your store on their phone?** Run `/pwa` and I'll add Progressive Web App support:
+
+- **Install from browser** - Customers tap 'Add to Home Screen' and get your store icon
+- **Works offline** - Product images and pages load instantly
+- **No app store needed** - Skip the 30% Apple/Google tax
+- **QR code ready** - I'll help you add a QR code for easy install (great for packaging, flyers, pop-up shops)
+
+Just run `/pwa` when you're ready!"
 
 ---
 
