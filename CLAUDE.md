@@ -1,142 +1,81 @@
 # dream-store-basic
 
-Minimal e-commerce store template with cart and guest checkout via `@dream-api/sdk`.
+E-commerce store template with cart and guest checkout via `@dream-api/sdk`.
 
-## Commands
+## IMPORTANT - How This Works
+
+**Dashboard First:** Before using this template, set up your project in the Dream API dashboard:
+1. Create a project (Store type)
+2. Add your products (name, price, description, images)
+3. Get your publishable key
+
+**Products load from your dashboard.** Add, edit, update inventory - all in the dashboard. Store updates automatically.
+
+**No auth required.** Guest checkout - Stripe collects customer info at payment.
+
+## Quick Start
 
 ```bash
-npm install    # Install dependencies
-npm run dev    # Start dev server
-npm run build  # Build for production
-```
-
-## Quick Setup
-
-```bash
-# 1. Clone and install
-git clone https://github.com/YOUR_USER/dream-store-basic.git
-cd dream-store-basic
 npm install
-
-# 2. Set your publishable key
-cp .env.example .env.local
-# Edit: VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
-
-# 3. Run
 npm run dev
 ```
 
-## What's Included
+Set `VITE_DREAM_PUBLISHABLE_KEY` in `.env.local` with your key from the dashboard.
 
-- Clean, minimal dark theme
-- Product grid with detail modals
-- Slide-out cart drawer
-- Multi-page navigation (Shop, About, Contact)
-- Guest checkout (no auth required)
-- Mobile responsive
+## Setup Command
+
+Run `/setup` for guided configuration:
+1. Add your publishable key
+2. Configure branding
+3. Done - products load from dashboard
 
 ## File Structure
 
 ```
-dream-store-basic/
-├── src/
-│   ├── App.tsx              # Main app + BRANDING config
-│   ├── main.tsx             # Entry point
-│   ├── index.css            # Tailwind styles
-│   ├── components/
-│   │   └── Layout.tsx       # Header, nav, footer
-│   ├── pages/
-│   │   ├── About.tsx        # About page
-│   │   └── Contact.tsx      # Contact form
-│   └── assets/              # Logo, images
-├── .claude/
-│   └── commands/
-│       └── setup.md         # AI setup command
-├── CLAUDE.md                # This file
-└── .env.example
+src/
+├── config.ts              # EDIT THIS - all branding in one place
+├── App.tsx                # Main app, product grid, cart
+├── components/
+│   └── Layout.tsx         # Header, nav, footer
+└── pages/
+    ├── About.tsx          # About page
+    └── Contact.tsx        # Contact page
 ```
 
-## Customization
+## What To Customize
 
-### Branding
+### src/config.ts (MAIN FILE)
 
-Edit the `BRANDING` object in `src/App.tsx`:
+All branding is here:
+- `storeName` - Your store name
+- `tagline` - Short tagline
+- `description` - One sentence about your store
+- `accentColor` - zinc, emerald, sky, violet, rose, amber
+- `logo` - Path to logo in public/ folder
+- `footer.tagline` - Footer description
+- `about` - About page content
+- `contact` - Contact email
+
+## What NOT To Modify
+
+1. **Product display logic** - Products come from API
+2. **Cart/checkout logic** - Already wired up
+3. **Stripe integration** - SDK handles it
+
+## SDK Reference
 
 ```typescript
-const BRANDING = {
-  storeName: 'Your Store',
-  tagline: 'Quality products, simple shopping',
-  description: 'Curated items for people who appreciate good things.',
-  primaryColor: '#18181b',  // zinc-900
-  accentColor: '#3f3f46',   // zinc-700
-}
-```
+import { DreamAPI } from '@dream-api/sdk'
 
-Also update `src/components/Layout.tsx`:
-```typescript
-const BRANDING = {
-  storeName: 'Your Store',
-}
-```
+const api = new DreamAPI({
+  publishableKey: import.meta.env.VITE_DREAM_PUBLISHABLE_KEY,
+})
 
-### Style Presets
-
-**Minimal (default)**
-```typescript
-primaryColor: '#18181b', accentColor: '#3f3f46'
-```
-
-**Bold**
-```typescript
-primaryColor: '#dc2626', accentColor: '#ea580c'  // Red/Orange
-primaryColor: '#2563eb', accentColor: '#7c3aed'  // Blue/Violet
-```
-
-**Warm**
-```typescript
-primaryColor: '#a16207', accentColor: '#ca8a04'  // Amber
-```
-
-**Dark**
-```typescript
-primaryColor: '#0f172a', accentColor: '#334155'  // Slate
-```
-
-### Adding a Logo
-
-Place your logo in `src/assets/logo.png`, then update `Layout.tsx`:
-
-```tsx
-<Link to="/" className="flex items-center gap-2">
-  <img src="/assets/logo.png" alt="Logo" className="h-8" />
-  <span className="text-xl font-medium text-zinc-100">{storeName}</span>
-</Link>
-```
-
-## How It Works
-
-### No Auth Required
-- Products are public (PK-only endpoint)
-- Cart checkout doesn't need user sign-in
-- Stripe collects customer info at checkout
-
-### Checkout Flow
-1. User adds items to cart
-2. Clicks "Checkout" in drawer
-3. Redirected to Stripe Checkout
-4. Stripe collects payment + email
-5. Success redirect back to store
-
-## SDK Usage
-
-### List Products
-```typescript
+// List products (from dashboard)
 const { products } = await api.products.list()
-// products[].name, price, priceId, imageUrl, soldOut, inventory
-```
+// products[].name, price, priceId, imageUrl, soldOut, inventory, features
 
-### Cart Checkout
-```typescript
+// Guest checkout
 const { url } = await api.products.cartCheckout({
   items: [{ priceId: 'price_xxx', quantity: 2 }],
   successUrl: window.location.origin + '?success=true',
@@ -145,55 +84,42 @@ const { url } = await api.products.cartCheckout({
 window.location.href = url
 ```
 
-## Environment
+## What You Control in Dashboard vs Template
 
-```env
-# .env.local
-VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
-```
+| In Dashboard | In Template |
+|--------------|-------------|
+| Products (name, price, images) | Branding, colors |
+| Inventory levels | About/Contact content |
+| Product descriptions | Footer links |
+| Product features | Logo image |
 
-That's it. No secret key needed for store mode.
+**Add products in dashboard → Store updates automatically.**
+
+## Checkout Flow
+
+1. User adds items to cart
+2. Clicks "Checkout" in drawer
+3. Redirected to Stripe Checkout
+4. Stripe collects payment + email
+5. Success redirect back to store
+
+No account needed. No auth required.
 
 ## Deployment
 
-Works with any static host:
-
 ```bash
 npm run build
-# Deploy dist/ to Cloudflare Pages, Vercel, Netlify, etc.
 ```
 
-Set `VITE_DREAM_PUBLISHABLE_KEY` in your host's environment variables.
+Deploy `dist/` anywhere:
+- **Cloudflare Pages**: `npx wrangler pages deploy dist`
+- **Vercel/Netlify**: Connect repo, set VITE_DREAM_PUBLISHABLE_KEY env var
 
-## Adding Features
+## Don't Do These Things
 
-### Cart Persistence
-```typescript
-// Save cart to localStorage
-useEffect(() => {
-  localStorage.setItem('cart', JSON.stringify(cart))
-}, [cart])
-
-// Load on mount
-const [cart, setCart] = useState<CartItem[]>(() => {
-  const saved = localStorage.getItem('cart')
-  return saved ? JSON.parse(saved) : []
-})
-```
-
-### Quantity Limits
-```typescript
-function addToCart(product: Product) {
-  const inCart = cart.find(i => i.priceId === product.priceId)
-  const currentQty = inCart?.quantity || 0
-
-  if (product.inventory && currentQty >= product.inventory) {
-    alert('Cannot add more - limited stock')
-    return
-  }
-  // ... rest
-}
-```
+- Don't hardcode products (they come from API)
+- Don't put secret key in frontend (only PK needed)
+- Don't build custom checkout (SDK handles it)
 
 ## Use Cases
 

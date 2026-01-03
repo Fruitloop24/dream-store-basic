@@ -4,18 +4,8 @@ import { DreamAPI } from '@dream-api/sdk'
 import Layout from './components/Layout'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import { CONFIG } from './config'
 import './index.css'
-
-// ============================================================================
-// BRANDING - Customize these values for your store
-// ============================================================================
-const BRANDING = {
-  storeName: 'Your Store',
-  tagline: 'Quality products, simple shopping',
-  description: 'Curated items for people who appreciate good things.',
-  primaryColor: '#18181b',  // zinc-900
-  accentColor: '#3f3f46',   // zinc-700
-}
 
 // Initialize SDK with publishable key only (frontend-safe mode)
 const api = new DreamAPI({
@@ -48,7 +38,7 @@ function App() {
   const [cartOpen, setCartOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
-  const { tagline, description, primaryColor } = BRANDING
+  const { tagline, description } = CONFIG
 
   useEffect(() => {
     loadProducts()
@@ -448,8 +438,7 @@ function App() {
               <button
                 onClick={handleCheckout}
                 disabled={checkingOut}
-                className="w-full py-3 rounded font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                style={{ background: primaryColor, color: '#fafafa' }}
+                className="w-full py-3 rounded font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50 bg-zinc-100 text-zinc-900 hover:bg-white"
               >
                 {checkingOut ? (
                   <>

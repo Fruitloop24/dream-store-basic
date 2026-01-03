@@ -1,120 +1,162 @@
-# Store Setup
+# /setup - Store Template Setup
 
-Configure this store template through a guided conversation.
+You are a helpful assistant setting up a Dream API Store template. Be enthusiastic about what they're getting - this is a full production-ready e-commerce store, not a skeleton.
 
-## Instructions
-
-Ask these questions ONE AT A TIME and wait for each answer before proceeding:
-
-### 1. Store Name
-"What's the name of your store?"
-
-### 2. Tagline
-"What's your tagline? (A short phrase that captures what you sell)"
-
-### 3. Description
-"How would you describe your store in one sentence?"
-
-### 4. Style
-"What style fits your brand?"
-- **Minimal** - Clean, lots of whitespace, understated
-- **Bold** - Strong colors, high contrast, impactful
-- **Warm** - Soft tones, inviting, approachable
-- **Dark** - Dark backgrounds, sleek, modern
-
-### 5. Primary Color
-Based on their style choice, suggest appropriate colors:
-
-**Minimal:** Neutral grays, black/white
-- Primary: `#18181b` (zinc-900), Accent: `#3f3f46` (zinc-700)
-
-**Bold:** Vibrant, saturated colors
-- Primary: `#dc2626` (red-600), Accent: `#ea580c` (orange-600)
-- Primary: `#2563eb` (blue-600), Accent: `#7c3aed` (violet-600)
-
-**Warm:** Earth tones, soft colors
-- Primary: `#a16207` (amber-700), Accent: `#ca8a04` (yellow-600)
-- Primary: `#b45309` (amber-600), Accent: `#d97706` (amber-500)
-
-**Dark:** Subtle highlights on dark base
-- Primary: `#18181b` (zinc-900), Accent: `#52525b` (zinc-600)
-- Primary: `#0f172a` (slate-900), Accent: `#334155` (slate-700)
-
-Ask: "I suggest [color scheme]. Want to use this, or provide your own hex colors?"
-
-### 6. Logo
-"Do you have a logo file to add? (If yes, they should place it in src/assets/)"
-
-If no logo, the store name will be displayed as text.
-
-### 7. Contact Email
-"What email should customers use to contact you?"
+Read the CLAUDE.md file first for full context.
 
 ---
 
-## After Gathering Info
+## What They're Getting (Tell Them!)
 
-Update these files:
+Before you start, explain what's included:
 
-### src/App.tsx
-Update the BRANDING object:
-```typescript
-const BRANDING = {
-  storeName: '[their store name]',
-  tagline: '[their tagline]',
-  description: '[their description]',
-  primaryColor: '[chosen primary]',
-  accentColor: '[chosen accent]',
-}
-```
+"This template comes with everything wired up and ready to go:
 
-### src/components/Layout.tsx
-Update the BRANDING object:
-```typescript
-const BRANDING = {
-  storeName: '[their store name]',
-}
-```
+- **Product Grid** - Beautiful product cards with images, prices, stock levels
+- **Product Details** - Modal with full description and features
+- **Shopping Cart** - Slide-out drawer with quantity controls
+- **Guest Checkout** - No account needed, Stripe handles payment
+- **Mobile Responsive** - Looks great on phones
+- **About & Contact Pages** - Ready to customize
 
-If they have a logo, update the header in Layout.tsx:
-```tsx
-<Link to="/" className="flex items-center gap-2">
-  <img src="/assets/logo.png" alt="Logo" className="h-8" />
-  <span className="text-xl font-medium text-zinc-100">{storeName}</span>
-</Link>
-```
-
-### src/pages/Contact.tsx
-Update the email address:
-```tsx
-<a href="mailto:[their email]">[their email]</a>
-```
-
-### src/pages/About.tsx
-Optionally customize the about content based on their description.
+All you need is your publishable key. Products come from your dashboard."
 
 ---
 
-## Final Steps
+## Step 1: API Key
 
-After making changes, tell them:
+Ask: **"What's your Dream API publishable key? It starts with `pk_test_` or `pk_live_`."**
 
-1. "Your store is configured! Here's what I set up:"
-   - Store name: [name]
-   - Style: [style]
-   - Colors: [primary] / [accent]
+Explain: "You get this from your Dream API dashboard after creating a project. Make sure you've already:
+1. Created a Store project in the dashboard
+2. Added your products (name, price, description, images)
 
-2. "To run your store locally:"
-   ```bash
-   npm install
-   npm run dev
-   ```
+Products load from your dashboard - you control them there, not in code."
 
-3. "Make sure your .env.local has your publishable key:"
-   ```
-   VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
-   ```
+Once they provide the key:
 
-4. "Products are managed in your dream-api dashboard. Any products you create there will appear in your store."
+1. Create `.env.local`:
+```
+VITE_DREAM_PUBLISHABLE_KEY=[their key]
+```
 
-5. "To deploy, run `npm run build` and upload the `dist/` folder to any static host (Cloudflare Pages, Vercel, Netlify)."
+2. Run:
+```bash
+npm install && npm run dev
+```
+
+3. Say: "Open http://localhost:5173 - you should see your store! Products will load from your dashboard."
+
+---
+
+## Step 2: Tell Me About Your Store
+
+Ask: **"What's your store called and what do you sell? Give me 1-2 sentences and I'll set up all the branding."**
+
+From their answer, update `src/config.ts`:
+- `storeName` - Their store name
+- `tagline` - Short tagline (you write this based on their description)
+- `description` - One sentence about what they sell
+- `footer.tagline` - Footer description
+
+**Be creative!** Write compelling copy based on what they told you.
+
+---
+
+## Step 3: Pick Your Color
+
+Ask: **"Pick your brand color: zinc (minimal), emerald (fresh), sky (clean), violet (bold), rose (warm), or amber (earthy)?"**
+
+Update `src/config.ts`:
+```typescript
+accentColor: '[their choice]',
+```
+
+---
+
+## Step 4: Logo (Optional)
+
+Ask: **"Got a logo? Drop it in the `public/` folder and tell me the filename. Otherwise I'll use text."**
+
+If they have one:
+```typescript
+logo: '/[filename]',
+```
+
+---
+
+## Step 5: Show Them What They Have
+
+Run `npm run dev` and walk them through:
+
+1. **Shop Page** - "This is your storefront. Products load from your Dream API dashboard."
+
+2. **Product Cards** - "Click 'Details' to see the full product modal. Click 'Add to Cart' to add items."
+
+3. **Cart Drawer** - "Click the cart icon. Users can adjust quantities, remove items, and checkout."
+
+4. **Checkout** - "When they click Checkout, they go to Stripe. No account needed - Stripe collects their info."
+
+5. **About & Contact** - "These pages use content from config.ts. Customize the text there."
+
+---
+
+## Step 6: More Customization (Optional)
+
+Ask: **"Want to customize more? I can help with:"**
+- About page content
+- Contact page email
+- Footer links
+
+If they want to customize more, walk them through `src/config.ts`.
+
+---
+
+## Done! What's Next
+
+Tell them:
+
+"Your store is ready! Here's what you control:
+
+**In the template:**
+- Branding, colors in `src/config.ts`
+- About/Contact content in `src/config.ts`
+- Images in `public/` folder
+
+**In the Dream API dashboard:**
+- Products (name, price, description, images)
+- Inventory levels
+- Features per product
+
+Add/edit products in dashboard → Store updates automatically.
+
+**Next steps:**
+1. **Add products** - In your Dream API dashboard
+2. **Add product images** - Upload in dashboard or use URLs
+3. **Deploy** - Run `npm run build` and deploy the `dist/` folder anywhere
+
+**Want to make it installable as a phone app?** Run `/pwa` and I'll add Progressive Web App support.
+
+**Need help?** Check CLAUDE.md for SDK methods and examples."
+
+---
+
+## Quick Reference
+
+SDK methods used:
+- `api.products.list()` - Get all products
+- `api.products.cartCheckout()` - Create Stripe checkout
+
+No auth required for stores - it's all guest checkout!
+
+---
+
+## Troubleshooting
+
+**"No products showing"** - Add products in your Dream API dashboard
+
+**"Images not loading"** - Make sure imageUrl is set in dashboard
+
+**"Checkout failing"** - Check your publishable key in `.env.local`
+
+**"npm install failed"** - Need Node 18+. Try `rm -rf node_modules && npm install`

@@ -1,14 +1,11 @@
 import { Link, useLocation } from 'react-router-dom'
+import { CONFIG } from '../config'
 
 interface LayoutProps {
   children: React.ReactNode
   cartCount: number
   cartTotal: number
   onCartClick: () => void
-}
-
-const BRANDING = {
-  storeName: 'Your Store',
 }
 
 const NAV_LINKS = [
@@ -19,7 +16,7 @@ const NAV_LINKS = [
 
 export default function Layout({ children, cartCount, cartTotal, onCartClick }: LayoutProps) {
   const location = useLocation()
-  const { storeName } = BRANDING
+  const { storeName, footer } = CONFIG
 
   return (
     <div className="min-h-screen bg-zinc-950 flex flex-col">
@@ -106,7 +103,7 @@ export default function Layout({ children, cartCount, cartTotal, onCartClick }: 
             <div className="md:col-span-2">
               <h3 className="text-lg font-medium text-zinc-100 mb-3">{storeName}</h3>
               <p className="text-zinc-500 text-sm leading-relaxed max-w-sm">
-                Quality products, simple shopping. We believe in making great things accessible.
+                {footer.tagline}
               </p>
             </div>
 
