@@ -4,7 +4,7 @@ import { DreamAPI } from '@dream-api/sdk'
 import Layout from './components/Layout'
 import About from './pages/About'
 import Contact from './pages/Contact'
-import { CONFIG } from './config'
+import { CONFIG, getAccentClasses, getThemeClasses } from './config'
 import './index.css'
 
 // Initialize SDK with publishable key only (frontend-safe mode)
@@ -39,6 +39,8 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   const { tagline, description } = CONFIG
+  const theme = getThemeClasses()
+  const accent = getAccentClasses()
 
   useEffect(() => {
     loadProducts()
@@ -137,17 +139,17 @@ function App() {
       <div className="max-w-6xl mx-auto px-4 py-16">
         {/* Hero */}
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-light text-zinc-100 mb-4 tracking-tight">
+          <h2 className={`text-4xl md:text-5xl font-light ${theme.heading} mb-4 tracking-tight`}>
             {tagline}
           </h2>
-          <p className="text-lg text-zinc-500 max-w-xl mx-auto">
+          <p className={`text-lg ${theme.body} max-w-xl mx-auto`}>
             {description}
           </p>
         </div>
 
         {loading && (
           <div className="flex justify-center items-center py-20">
-            <div className="w-8 h-8 border-2 border-zinc-700 border-t-zinc-400 rounded-full animate-spin"></div>
+            <div className={`w-8 h-8 border-2 ${theme.divider} border-t-current rounded-full animate-spin ${theme.body}`}></div>
           </div>
         )}
 
@@ -162,10 +164,10 @@ function App() {
             {products.map((product) => (
               <div
                 key={product.priceId}
-                className="group bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-700 transition-colors"
+                className={`group ${theme.cardBg} rounded-lg overflow-hidden ${theme.cardHover} transition-colors`}
               >
                 {/* Product Image */}
-                <div className="aspect-square bg-zinc-900 relative overflow-hidden">
+                <div className={`aspect-square ${theme.imagePlaceholder} relative overflow-hidden`}>
                   {product.imageUrl ? (
                     <img
                       src={product.imageUrl}
@@ -173,15 +175,15 @@ function App() {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-zinc-700">
+                    <div className={`w-full h-full flex items-center justify-center ${theme.imagePlaceholder}`}>
                       <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                       </svg>
                     </div>
                   )}
                   {product.soldOut && (
-                    <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                      <span className="text-zinc-400 text-sm font-medium tracking-wide uppercase">
+                    <div className={`absolute inset-0 ${theme.soldOutOverlay} flex items-center justify-center`}>
+                      <span className={`${theme.soldOutText} text-sm font-medium tracking-wide uppercase`}>
                         Sold Out
                       </span>
                     </div>
@@ -190,20 +192,20 @@ function App() {
 
                 {/* Product Info */}
                 <div className="p-5">
-                  <h3 className="text-lg font-medium text-zinc-100 mb-1">
+                  <h3 className={`text-lg font-medium ${theme.heading} mb-1`}>
                     {product.displayName || product.name}
                   </h3>
                   {product.description && (
-                    <p className="text-zinc-500 text-sm mb-4 line-clamp-2">
+                    <p className={`${theme.muted} text-sm mb-4 line-clamp-2`}>
                       {product.description}
                     </p>
                   )}
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-2xl font-light text-zinc-200">
+                    <span className={`text-2xl font-light ${theme.price}`}>
                       ${product.price.toFixed(2)}
                     </span>
                     {product.inventory !== null && product.inventory !== undefined && (
-                      <span className="text-xs text-zinc-600">
+                      <span className={`text-xs ${theme.stockText}`}>
                         {product.inventory} in stock
                       </span>
                     )}
@@ -212,17 +214,14 @@ function App() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setSelectedProduct(product)}
-                      className="flex-1 py-2.5 text-sm font-medium rounded border border-zinc-700 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-colors"
+                      className={`flex-1 py-2.5 text-sm font-medium rounded ${theme.buttonSecondary} transition-colors`}
                     >
                       Details
                     </button>
                     <button
                       onClick={() => addToCart(product)}
                       disabled={product.soldOut}
-                      className="flex-1 py-2.5 text-sm font-medium rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-zinc-900"
-                      style={{
-                        background: product.soldOut ? '#3f3f46' : '#fafafa'
-                      }}
+                      className={`flex-1 py-2.5 text-sm font-medium rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${accent.bg} ${accent.buttonText} ${accent.bgHover}`}
                     >
                       {product.soldOut ? 'Unavailable' : 'Add to Cart'}
                     </button>
@@ -235,7 +234,7 @@ function App() {
 
         {!loading && !error && products.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-zinc-500">No products available yet.</p>
+            <p className={theme.muted}>No products available yet.</p>
           </div>
         )}
       </div>
@@ -248,11 +247,11 @@ function App() {
       {selectedProduct && (
         <>
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60]"
+            className={`fixed inset-0 ${theme.modalOverlay} backdrop-blur-sm z-[60]`}
             onClick={() => setSelectedProduct(null)}
           />
-          <div className="fixed inset-4 md:inset-10 lg:inset-20 bg-zinc-900 border border-zinc-800 rounded-lg z-[60] overflow-hidden flex flex-col md:flex-row">
-            <div className="md:w-1/2 bg-zinc-950 flex items-center justify-center p-8">
+          <div className={`fixed inset-4 md:inset-10 lg:inset-20 ${theme.modalBg} rounded-lg z-[60] overflow-hidden flex flex-col md:flex-row`}>
+            <div className={`md:w-1/2 ${theme.imagePlaceholder} flex items-center justify-center p-8`}>
               {selectedProduct.imageUrl ? (
                 <img
                   src={selectedProduct.imageUrl}
@@ -260,7 +259,7 @@ function App() {
                   className="max-w-full max-h-full object-contain"
                 />
               ) : (
-                <svg className="w-32 h-32 text-zinc-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-32 h-32 ${theme.muted}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
               )}
@@ -269,36 +268,36 @@ function App() {
             <div className="md:w-1/2 p-8 flex flex-col overflow-y-auto">
               <button
                 onClick={() => setSelectedProduct(null)}
-                className="absolute top-4 right-4 text-zinc-500 hover:text-zinc-300 transition-colors"
+                className={`absolute top-4 right-4 ${theme.muted} ${theme.link} transition-colors`}
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
-              <h2 className="text-2xl font-medium text-zinc-100 mb-2">
+              <h2 className={`text-2xl font-medium ${theme.heading} mb-2`}>
                 {selectedProduct.displayName || selectedProduct.name}
               </h2>
 
-              <div className="text-3xl font-light text-zinc-300 mb-6">
+              <div className={`text-3xl font-light ${theme.price} mb-6`}>
                 ${selectedProduct.price.toFixed(2)}
               </div>
 
               {selectedProduct.description && (
-                <p className="text-zinc-400 mb-6 leading-relaxed">
+                <p className={`${theme.body} mb-6 leading-relaxed`}>
                   {selectedProduct.description}
                 </p>
               )}
 
               {selectedProduct.features && selectedProduct.features.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-3">
+                  <h3 className={`text-xs font-medium ${theme.muted} uppercase tracking-wider mb-3`}>
                     Features
                   </h3>
                   <ul className="space-y-2">
                     {selectedProduct.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2 text-zinc-400 text-sm">
-                        <span className="w-1 h-1 bg-zinc-600 rounded-full"></span>
+                      <li key={i} className={`flex items-center gap-2 ${theme.body} text-sm`}>
+                        <span className={`w-1 h-1 ${theme.featureDot} rounded-full`}></span>
                         {feature}
                       </li>
                     ))}
@@ -307,7 +306,7 @@ function App() {
               )}
 
               {selectedProduct.inventory !== null && selectedProduct.inventory !== undefined && (
-                <p className="text-zinc-600 text-sm mb-6">
+                <p className={`${theme.stockText} text-sm mb-6`}>
                   {selectedProduct.inventory > 0 ? `${selectedProduct.inventory} available` : 'Out of stock'}
                 </p>
               )}
@@ -319,17 +318,13 @@ function App() {
                     setSelectedProduct(null)
                   }}
                   disabled={selectedProduct.soldOut}
-                  className="flex-1 py-3 rounded font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                  style={{
-                    background: selectedProduct.soldOut ? '#3f3f46' : '#fafafa',
-                    color: selectedProduct.soldOut ? '#a1a1aa' : '#18181b'
-                  }}
+                  className={`flex-1 py-3 rounded font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${accent.bg} ${accent.buttonText} ${accent.bgHover}`}
                 >
                   {selectedProduct.soldOut ? 'Sold Out' : 'Add to Cart'}
                 </button>
                 <button
                   onClick={() => setSelectedProduct(null)}
-                  className="px-6 py-3 rounded font-medium border border-zinc-700 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-colors"
+                  className={`px-6 py-3 rounded font-medium ${theme.buttonSecondary} transition-colors`}
                 >
                   Close
                 </button>
@@ -342,20 +337,20 @@ function App() {
       {/* Cart Drawer */}
       {cartOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+          className={`fixed inset-0 ${theme.modalOverlay} backdrop-blur-sm z-50`}
           onClick={() => setCartOpen(false)}
         />
       )}
 
-      <div className={`fixed top-0 right-0 h-full w-full max-w-md bg-zinc-900 border-l border-zinc-800 z-50 transform transition-transform duration-300 ${cartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed top-0 right-0 h-full w-full max-w-md ${theme.drawerBg} z-50 transform transition-transform duration-300 ${cartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col h-full">
-          <div className="flex justify-between items-center p-6 border-b border-zinc-800">
-            <h2 className="text-lg font-medium text-zinc-100">
-              Cart {cartCount > 0 && <span className="text-zinc-500 font-normal">({cartCount})</span>}
+          <div className={`flex justify-between items-center p-6 border-b ${theme.divider}`}>
+            <h2 className={`text-lg font-medium ${theme.heading}`}>
+              Cart {cartCount > 0 && <span className={`${theme.muted} font-normal`}>({cartCount})</span>}
             </h2>
             <button
               onClick={() => setCartOpen(false)}
-              className="text-zinc-500 hover:text-zinc-300 transition-colors"
+              className={`${theme.muted} ${theme.link} transition-colors`}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -366,10 +361,10 @@ function App() {
           <div className="flex-1 overflow-y-auto p-6">
             {cart.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-zinc-500 mb-4">Your cart is empty</p>
+                <p className={`${theme.muted} mb-4`}>Your cart is empty</p>
                 <button
                   onClick={() => setCartOpen(false)}
-                  className="text-zinc-400 hover:text-zinc-200 text-sm transition-colors"
+                  className={`${theme.link} text-sm transition-colors`}
                 >
                   Continue shopping
                 </button>
@@ -379,48 +374,48 @@ function App() {
                 {cart.map((item) => (
                   <div
                     key={item.priceId}
-                    className="flex gap-4 p-4 bg-zinc-800/50 rounded border border-zinc-800"
+                    className={`flex gap-4 p-4 ${theme.cartItemBg} rounded`}
                   >
                     {item.imageUrl ? (
                       <img src={item.imageUrl} alt={item.name} className="w-16 h-16 rounded object-cover flex-shrink-0" />
                     ) : (
-                      <div className="w-16 h-16 rounded bg-zinc-800 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-6 h-6 text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className={`w-16 h-16 rounded ${theme.imagePlaceholder} flex items-center justify-center flex-shrink-0`}>
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                       </div>
                     )}
 
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-zinc-200 font-medium text-sm truncate">
+                      <h4 className={`${theme.heading} font-medium text-sm truncate`}>
                         {item.displayName || item.name}
                       </h4>
-                      <p className="text-zinc-500 text-sm">${item.price.toFixed(2)}</p>
+                      <p className={`${theme.muted} text-sm`}>${item.price.toFixed(2)}</p>
 
                       <div className="flex items-center gap-3 mt-2">
                         <button
                           onClick={() => updateQuantity(item.priceId, -1)}
-                          className="w-6 h-6 rounded bg-zinc-700 hover:bg-zinc-600 text-zinc-300 flex items-center justify-center text-sm transition-colors"
+                          className={`w-6 h-6 rounded ${theme.quantityButton} flex items-center justify-center text-sm transition-colors`}
                         >
                           -
                         </button>
-                        <span className="text-zinc-300 text-sm w-4 text-center">{item.quantity}</span>
+                        <span className={`${theme.heading} text-sm w-4 text-center`}>{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.priceId, 1)}
-                          className="w-6 h-6 rounded bg-zinc-700 hover:bg-zinc-600 text-zinc-300 flex items-center justify-center text-sm transition-colors"
+                          className={`w-6 h-6 rounded ${theme.quantityButton} flex items-center justify-center text-sm transition-colors`}
                         >
                           +
                         </button>
                         <button
                           onClick={() => removeFromCart(item.priceId)}
-                          className="ml-auto text-zinc-600 hover:text-red-400 text-xs transition-colors"
+                          className="ml-auto text-red-500 hover:text-red-400 text-xs transition-colors"
                         >
                           Remove
                         </button>
                       </div>
                     </div>
 
-                    <div className="text-zinc-200 font-medium text-sm">
+                    <div className={`${theme.heading} font-medium text-sm`}>
                       ${(item.price * item.quantity).toFixed(2)}
                     </div>
                   </div>
@@ -430,26 +425,26 @@ function App() {
           </div>
 
           {cart.length > 0 && (
-            <div className="p-6 border-t border-zinc-800">
+            <div className={`p-6 border-t ${theme.divider}`}>
               <div className="flex justify-between items-center mb-4">
-                <span className="text-zinc-500">Subtotal</span>
-                <span className="text-xl font-medium text-zinc-100">${cartTotal.toFixed(2)}</span>
+                <span className={theme.muted}>Subtotal</span>
+                <span className={`text-xl font-medium ${theme.heading}`}>${cartTotal.toFixed(2)}</span>
               </div>
               <button
                 onClick={handleCheckout}
                 disabled={checkingOut}
-                className="w-full py-3 rounded font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50 bg-zinc-100 text-zinc-900 hover:bg-white"
+                className={`w-full py-3 rounded font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50 ${accent.bg} ${accent.buttonText} ${accent.bgHover}`}
               >
                 {checkingOut ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-zinc-400 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                     Processing...
                   </>
                 ) : (
                   'Checkout'
                 )}
               </button>
-              <p className="text-center text-zinc-600 text-xs mt-3">
+              <p className={`text-center ${theme.muted} text-xs mt-3`}>
                 Secure checkout via Stripe
               </p>
             </div>
