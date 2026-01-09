@@ -89,7 +89,7 @@ function App() {
     )
   }
 
-  const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0) / 100
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0)
 
   async function handleCheckout() {
@@ -202,7 +202,7 @@ function App() {
                   )}
                   <div className="flex justify-between items-center mb-4">
                     <span className={`text-2xl font-light ${theme.price}`}>
-                      ${product.price.toFixed(2)}
+                      ${(product.price / 100).toFixed(2)}
                     </span>
                     {product.inventory !== null && product.inventory !== undefined && (
                       <span className={`text-xs ${theme.stockText}`}>
@@ -280,7 +280,7 @@ function App() {
               </h2>
 
               <div className={`text-3xl font-light ${theme.price} mb-6`}>
-                ${selectedProduct.price.toFixed(2)}
+                ${(selectedProduct.price / 100).toFixed(2)}
               </div>
 
               {selectedProduct.description && (
@@ -390,7 +390,7 @@ function App() {
                       <h4 className={`${theme.heading} font-medium text-sm truncate`}>
                         {item.displayName || item.name}
                       </h4>
-                      <p className={`${theme.muted} text-sm`}>${item.price.toFixed(2)}</p>
+                      <p className={`${theme.muted} text-sm`}>${(item.price / 100).toFixed(2)}</p>
 
                       <div className="flex items-center gap-3 mt-2">
                         <button
@@ -416,7 +416,7 @@ function App() {
                     </div>
 
                     <div className={`${theme.heading} font-medium text-sm`}>
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ${(item.price * item.quantity / 100).toFixed(2)}
                     </div>
                   </div>
                 ))}

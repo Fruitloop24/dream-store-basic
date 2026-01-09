@@ -9,9 +9,9 @@ export const CONFIG = {
   // ============================================
   // BASIC INFO
   // ============================================
-  storeName: 'Your Store',
-  tagline: 'Quality products, simple shopping',
-  description: 'Curated items for people who appreciate good things.',
+  storeName: 'Dream Drop',
+  tagline: 'Fresh finds. Zero friction.',
+  description: 'Digital goods and premium picks, checkout in seconds.',
 
   // ============================================
   // LOGO & HERO IMAGE (optional)
@@ -24,22 +24,22 @@ export const CONFIG = {
   // THEME & COLORS
   // ============================================
   // Theme: 'light' (clean, minimal) or 'dark' (modern, bold)
-  theme: 'dark' as 'light' | 'dark',
+  theme: 'light' as 'light' | 'dark',
 
   // Accent color for buttons, highlights
   // Options: zinc, emerald, sky, violet, rose, amber
-  accentColor: 'zinc',
+  accentColor: 'emerald',
 
   // ============================================
   // FOOTER
   // ============================================
   footer: {
-    tagline: 'Quality products, simple shopping. We believe in making great things accessible.',
+    tagline: 'Dream Drop - where great products meet effortless checkout. No accounts, no hassle.',
     links: {
       support: [
         { label: 'FAQ', href: '#' },
-        { label: 'Shipping', href: '#' },
-        { label: 'Returns', href: '#' },
+        { label: 'Support', href: '#' },
+        { label: 'Contact', href: '/contact' },
       ],
     },
   },
@@ -48,12 +48,12 @@ export const CONFIG = {
   // ABOUT PAGE
   // ============================================
   about: {
-    headline: 'About Us',
-    content: `We started this store with a simple idea: great products shouldn't be complicated.
+    headline: 'About Dream Drop',
+    content: `We built Dream Drop because checkout should take seconds, not minutes.
 
-Every item we sell is carefully selected for quality and value. We work directly with makers and suppliers who share our commitment to craftsmanship.
+No account creation. No password resets. No friction. Just tap, pay, done.
 
-Our goal is to make shopping simple. No gimmicks, no upsells - just good products at fair prices.`,
+Every product in our store is handpicked. We don't do inventory bloat - if it's here, it's worth your time.`,
   },
 
   // ============================================
@@ -61,8 +61,8 @@ Our goal is to make shopping simple. No gimmicks, no upsells - just good product
   // ============================================
   contact: {
     headline: 'Get in Touch',
-    email: 'hello@yourstore.com',
-    response: "We'll get back to you within 24 hours.",
+    email: 'hello@dreamdrop.store',
+    response: "We respond fast. Usually within a few hours.",
   },
 }
 

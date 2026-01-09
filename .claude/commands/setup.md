@@ -45,7 +45,7 @@ VITE_DREAM_PUBLISHABLE_KEY=[their key]
 npm install && npm run dev
 ```
 
-3. Say: "Open http://localhost:5173 - you should see your store! Products will load from your dashboard."
+3. Say: "Open http://localhost:5173 - you should see your store! Products will load from your dashboard. **Then come back here** - we're going to customize everything for your brand."
 
 ---
 

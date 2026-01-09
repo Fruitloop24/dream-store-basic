@@ -13,14 +13,58 @@ E-commerce store template with cart and guest checkout via `@dream-api/sdk`.
 
 **No auth required.** Guest checkout - Stripe collects customer info at payment.
 
+## YOUR PRODUCTS - All Managed in Dashboard
+
+Unlike SaaS templates, you DON'T add products in code. Everything is in your Dream API dashboard:
+
+**To add products:**
+1. Go to Dream API dashboard
+2. Select your Store project
+3. Click "Add Product"
+4. Fill in: name, price, description, images (drag & drop)
+5. Save - your store updates automatically
+
+**To update inventory:**
+- Edit product in dashboard, change quantity
+- Store shows "Sold Out" automatically when inventory hits 0
+
+**To change prices:**
+- Edit in dashboard - store updates immediately
+
+**Images:**
+- Upload via dashboard (uses R2 storage)
+- Or paste external image URLs
+
+**NO CODE CHANGES NEEDED for products.** Just manage everything in your dashboard.
+
 ## Quick Start
 
 ```bash
 npm install
+cp .env.example .env.local
+# Add your publishable key to .env.local
 npm run dev
 ```
 
-Set `VITE_DREAM_PUBLISHABLE_KEY` in `.env.local` with your key from the dashboard.
+**That's it.** Your store now has:
+- Product grid (pulls from dashboard)
+- Shopping cart with drawer
+- Stripe checkout (guest - no auth needed)
+
+Go check it out at **http://localhost:5173** - add items to cart, try checkout. It all works. **Then come back here** - that was just the foundation.
+
+## Let's Customize This Thing
+
+**Now I can customize almost anything for you:**
+- Brand name, colors, theme (dark/light)
+- Store tagline and description
+- About and contact pages
+- Hero images, logos, custom sections
+- Layouts, spacing, styling tweaks
+
+**Just tell me what you're selling.** "I'm selling vintage sneakers" or "Make it feel more premium" - I'll adjust the styling and copy.
+
+Run `/setup` for a guided walkthrough, or just start asking me to change things. This is where it gets fun.
 
 ## Setup Command
 
