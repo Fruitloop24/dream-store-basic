@@ -103,46 +103,7 @@ If they don't have icons, offer to help them think of what to use.
 
 ---
 
-## Step 4: Add QR Code for Easy Install
-
-Ask: **"Want to add a QR code so customers can easily install your store? Perfect for packaging, flyers, and pop-up shops!"**
-
-If yes, explain:
-
-"Here's how to add an install QR code:
-
-1. **Generate your QR code** - After you deploy, use [QR Code Generator](https://www.qr-code-generator.com/) with your live URL
-
-2. **Use everywhere:**
-   - Product packaging & inserts
-   - Business cards
-   - Pop-up shop displays
-   - Social media posts
-   - Email receipts
-   - Flyers & stickers
-
-3. **Add to your store** - I can add a footer section with the QR code"
-
-If they want to add it to the footer, offer to add:
-
-```tsx
-{/* Install App Section */}
-<div className="border-t border-zinc-800 mt-8 pt-8 text-center">
-  <h3 className="text-sm font-medium mb-2">Shop from Your Phone</h3>
-  <p className="text-zinc-500 text-xs mb-4">Scan to install - no app store needed</p>
-  <img
-    src="/qr-code.png"
-    alt="Scan to install"
-    className="mx-auto w-32 h-32 rounded-lg"
-  />
-</div>
-```
-
-Tell them to save their QR code as `public/qr-code.png`.
-
----
-
-## Step 5: Test PWA
+## Step 4: Test PWA
 
 Run:
 ```bash
@@ -163,20 +124,99 @@ Your store icon will appear on their home screen!"
 
 ---
 
+## Step 5: Deploy
+
+Tell them:
+
+"Your PWA is ready! Deploy it now:
+
+```bash
+npm run build
+```
+
+**Deploy options:**
+- **Cloudflare Pages**: `npx wrangler pages deploy dist`
+- **Vercel/Netlify**: Connect repo, set `VITE_DREAM_PUBLISHABLE_KEY` env var
+
+Make sure you're on HTTPS (required for PWA to work)."
+
+Ask: **"What's your deployed URL? (e.g., https://mystore.pages.dev)"**
+
+---
+
+## Step 6: Generate QR Code
+
+Once they provide the URL, generate a QR code using Python:
+
+```bash
+# Create a virtual environment and install qrcode
+python3 -m venv qr-venv
+source qr-venv/bin/activate  # On Windows: qr-venv\Scripts\activate
+pip install qrcode[pil]
+```
+
+Then generate the QR code:
+
+```bash
+python3 -c "
+import qrcode
+qr = qrcode.QRCode(version=1, box_size=10, border=2)
+qr.add_data('THEIR_DEPLOYED_URL_HERE')
+qr.make(fit=True)
+img = qr.make_image(fill_color='black', back_color='white')
+img.save('public/qr-code.png')
+print('QR code saved to public/qr-code.png')
+"
+```
+
+**Replace `THEIR_DEPLOYED_URL_HERE` with their actual URL.**
+
+After generating, clean up:
+```bash
+deactivate
+rm -rf qr-venv
+```
+
+---
+
+## Step 7: Embed QR Code in Store
+
+Ask: **"Want me to add the QR code to your store footer?"**
+
+If yes, add this section to the footer:
+
+```tsx
+{/* Install App Section */}
+<div className="border-t border-zinc-800 mt-8 pt-8 text-center">
+  <h3 className="text-sm font-medium mb-2">Shop from Your Phone</h3>
+  <p className="text-zinc-500 text-xs mb-4">Scan to install - no app store needed</p>
+  <img
+    src="/qr-code.png"
+    alt="Scan to install"
+    className="mx-auto w-32 h-32 rounded-lg"
+  />
+</div>
+```
+
+Tell them: "After adding the QR section, redeploy to see it live:
+```bash
+npm run build && npx wrangler pages deploy dist
+```"
+
+---
+
 ## Done!
 
 Tell them:
 
-"Your store is now installable as a PWA! Customers can:
+"Your store is now installable as a PWA with a QR code! Customers can:
 
+- **Scan the QR** - Opens your store instantly
 - **Install from browser** - No app store needed
 - **Launch from home screen** - Your store, one tap away
 - **Browse offline** - Cached products load instantly
-- **Get notified** - Ready for push notifications later
 
-**QR Code Ideas:**
-
-Print your QR code everywhere:
+**Print your QR code everywhere:**
 - **Product inserts** - 'Shop more at [store]' card in packages
 - **Packaging** - QR code on boxes, bags, labels
 - **Pop-up shops** - Table display with 'Scan to Shop'
@@ -200,3 +240,8 @@ Customers scan → Install → Shop. Zero friction, zero app store fees!"
 **"Service worker not updating"**
 - Hard refresh (Cmd+Shift+R / Ctrl+Shift+R)
 - Clear site data in DevTools → Application → Storage
+
+**"QR code generation failed"**
+- Make sure Python 3 is installed: `python3 --version`
+- Try `pip3` instead of `pip` if needed
+- On some systems: `python -m venv` instead of `python3 -m venv`
