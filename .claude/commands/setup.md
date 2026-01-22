@@ -19,7 +19,9 @@ Before you start, explain what's included:
 - **Mobile Responsive** - Looks great on phones
 - **About & Contact Pages** - Ready to customize
 
-All you need is your publishable key. Products come from your dashboard."
+All you need is your publishable key. Products come from your dashboard.
+
+**After setup, you can customize anything through natural language.** Just tell me what you want - 'make it feel premium', 'use a minimalist theme', 'write copy for my candle shop' - and I'll make it happen."
 
 ---
 
