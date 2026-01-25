@@ -66,6 +66,13 @@ Go check it out at **http://localhost:5173** - add items to cart, try checkout. 
 
 Run `/setup` for a guided walkthrough, or just start asking me to change things. This is where it gets fun.
 
+## AI Commands
+
+Commands for AI editors (Claude Code, Cursor, Windsurf) are in `.claude/commands/`:
+
+- **`.claude/commands/setup.md`** - Interactive setup wizard for branding, API key, theme
+- **`.claude/commands/pwa.md`** - Add Progressive Web App support (installable, works offline)
+
 ## Setup Command
 
 Run `/setup` for guided configuration:
