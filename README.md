@@ -19,7 +19,12 @@
 
 ## Quick Start
 
-Open this project in **Claude Code**, **Cursor**, or **Windsurf** and run:
+```bash
+git clone https://github.com/Fruitloop24/dream-store-basic.git my-store
+cd my-store
+```
+
+Open in **Claude Code**, **Cursor**, or **Windsurf** and run:
 
 ```
 /setup
